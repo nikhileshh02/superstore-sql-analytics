@@ -28,7 +28,7 @@ Profit          DECIMAL(10,4)
 
 SET global local_infile = ON;
 
-LOAD DATA LOCAL INFILE 'N:/MY_SQL/Project/cleaned_sales_dataset.csv'
+LOAD DATA LOCAL INFILE 'your_path/cleaned_sales_dataset.csv'
 into table store_sales
 fields terminated by ','
 OPTIONALLY ENCLOSED BY '"'
@@ -164,7 +164,7 @@ group by city
 order by sum(quantity) desc;
 
 
-# Repeat Purchase Rate by Customer					### ask to sir
+# Repeat Purchase Rate by Customer					
 #  16  -- How many customers have placed more than one order?
 select count(*) as Reapeat_Customer_Count
 from (
@@ -192,7 +192,16 @@ order by field(Seasons, "Spring", "Summer", "Autum", "Winters");
 
 # Profit Contribution by Product Category
 #  18  -- How much profit does each product category contribute to the overall total profit?
-
+SELECT 
+    category,
+    SUM(profit) AS category_profit,
+    ROUND(
+        (SUM(profit) / (SELECT SUM(profit) FROM store_sales)) * 100,
+        2
+    ) AS profit_contribution_percentage
+FROM store_sales
+GROUP BY category
+ORDER BY profit_contribution_percentage DESC;
 
 
 # Top 5 Most Profitable Products
@@ -218,15 +227,15 @@ group by segment
 order by total_sales desc;
 
 
-# Highest-Selling Products with Low Profit Margins					#### ask to sir
+# Highest-Selling Products with Low Profit Margins					
 #  22  -- Which high-revenue products have below-average profit margins?
-select product_name, sum(sales) as total_revenue, (sum(profit) / sum(sales)) * 100 as profit_margins		#gemini
+select product_name, sum(sales) as total_revenue, (sum(profit) / sum(sales)) * 100 as profit_margins		
 from store_sales
 group by product_name
 having (sum(profit) / sum(sales)) * 100 < 12.47
 order by total_revenue desc ;
 
-select									# by sir
+select									
 		product_name,
         sum(sales) as Total_sales,
         (sum(profit) / sum(sales)) as ProfitMargin
