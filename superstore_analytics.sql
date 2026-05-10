@@ -28,7 +28,8 @@ Profit          DECIMAL(10,4)
 
 SET global local_infile = ON;
 
-LOAD DATA LOCAL INFILE 'your_path/cleaned_sales_dataset.csv'
+-- ⚠️ Replace the path below with your local file path before running
+LOAD DATA LOCAL INFILE '/your/full/path/to/superstore.csv'
 into table store_sales
 fields terminated by ','
 OPTIONALLY ENCLOSED BY '"'
